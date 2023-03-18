@@ -10,6 +10,12 @@ repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     google()
+    maven("https://maven.tryformation.com/releases") {
+        content {
+            includeGroup("com.jillesvangurp")
+            includeGroup("com.tryformation")
+        }
+    }
 }
 
 kotlin {
@@ -22,6 +28,13 @@ kotlin {
             dependencies {
                 implementation(compose.web.core)
                 implementation(compose.runtime)
+
+                implementation("com.tryformation:fluent-kotlin:_")
+                implementation("com.jillesvangurp:search-client:_")
+                implementation(KotlinX.serialization.json)
+
+                implementation(Koin.core)
+
 
                 implementation(npm("tailwindcss", "3.2.7")) // Official tailwindcss package
                 implementation(npm("@tailwindcss/forms", "0.5.3"))

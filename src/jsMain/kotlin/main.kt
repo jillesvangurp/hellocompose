@@ -1,42 +1,45 @@
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import org.jetbrains.compose.web.css.padding
-import org.jetbrains.compose.web.css.px
+import androidx.compose.runtime.*
+import counter.counter
+import counter.counterModule
 import org.jetbrains.compose.web.dom.*
-import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
+import org.koin.core.context.GlobalContext
+import org.koin.core.context.startKoin
+import org.koin.core.qualifier.Qualifier
+import org.koin.dsl.module
 
 @JsModule("./styles.css")
 external val cssFile: dynamic
 
+val koin get() = GlobalContext.get()
+
+// nice to use enums for qualifiers
+enum class Qualifiers : Qualifier {
+    Counter
+    ;
+
+    override val value = this.name
+}
+
+
 fun main() {
-    var count: Int by mutableStateOf(0)
+
+    startKoin {
+        modules(counterModule)
+    }
 
     renderComposable(rootElementId = "root") {
         Div({
-            classes("container", "mx-auto", "bg-cyan-900")
+            // tailwind integration works
+            classes("container", "mx-auto", "px-4", "bg-gray-100")
         }) {
+
             P {
-                Text("Oh Hai")
+                Text("Oh Hai Compose")
             }
-            Div({ style { padding(25.px) } }) {
-                Button(attrs = {
-                    onClick { count -= 1 }
-                }) {
-                    Text("-")
-                }
-
-                Span({ style { padding(15.px) } }) {
-                    Text("$count")
-                }
-
-                Button(attrs = {
-                    onClick { count += 1 }
-                }) {
-                    Text("+")
-                }
-            }
+            counter()
         }
     }
 }
+
+
